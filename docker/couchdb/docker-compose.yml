@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+    couchdb:
+        container_name: couchdb-container
+        image: apache/couchdb
+        ports: 
+            - "5984:5984"
+            - "4369:4369"
+            - "5986:5986"
+        volumes: 
+            - ./dbdata/couchdb:/opt/couchdb/data
+        environment: 
+            COUCHDB_USER: admin
+            COUCHDB_PASSWORD: password
+        networks: 
+            - couchdb-network
+
+    couchdb-init:
+        image: ubuntu
+        deploy:
+            restart_policy:
+                condition: on-failure
+        environment: 
+            COUCHDB_USER: admin
+            COUCHDB_PASSWORD: password
+            COUCHDB_PORT: 5984
+            COUCHDB_DATABASE: test
+        depends_on: 
+            - couchdb
+        command: ["sh","-c","sleep 15 && curl -u admin:password -X PUT couchdb:5984/_users && curl -u admin:password -X PUT couchdb:5984/test"]
+        networks: 
+            - couchdb-network
+
+
+networks:
+    couchdb-network:
+        driver: bridge
