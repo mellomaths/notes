@@ -85,6 +85,12 @@ bin/kafka-topics.sh --alter --bootstrap-server localhost:9092 --topic test --par
 bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 ```
 
+### Describing details of all existing topics
+
+```
+bin/kafka-topics.sh --describe --bootstrap-server localhost:9092
+```
+
 ### Producing a new message into a topic
 
 ```
