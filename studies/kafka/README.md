@@ -73,6 +73,12 @@ bin/kafka-server-start.sh config/server.properties
 bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test
 ```
 
+### Changing the number of partitions of a topic
+
+```
+bin/kafka-topics.sh --alter --bootstrap-server localhost:9092 --topic test --partitions 3
+```
+
 ### Listing all existing topics
 
 ```
@@ -88,11 +94,11 @@ bin/kafka-console-producer.sh --broker-list --bootstrap-server localhost:9092 --
 ### Consuming a topic
 
 ```
-bin/kafka-console-consumer.sh  --bootstrap-server localhost:9092 --topic test
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test
 ```
 
 ### Consuming a topic from beginning
 
 ```
-bin/kafka-console-consumer.sh  --bootstrap-server localhost:9092 --topic test --from-beginning
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
 ```
