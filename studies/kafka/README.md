@@ -108,3 +108,9 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test
 ```
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
 ```
+
+### Describing all consumer groups
+
+```
+bin/kafka-consumer-groups.sh --all-groups --bootstrap-server localhost:9092 --describe
+```
