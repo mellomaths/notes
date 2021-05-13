@@ -6,6 +6,44 @@ Apache Kafka is a framework implementation of a software bus using stream-proces
 
 Based on the commit log, Kafka allows users to subscribe to it and publish data to any number of systems or real-time applications. Example applications include managing passenger and driver matching at Uber, providing real-time analytics and predictive maintenance for British Gas smart home, and performing numerous real-time services across all of LinkedIn.
 
+## Key concepts
+
+### Producers and Consumers
+
+Producers and consumers are services that listen to or send messages in Kafka. These services are your backend services. A service can be both a consumer and producer.
+
+![Producers and Consumers](https://miro.medium.com/max/660/0*pdPBL_zbKmUNKnGV)
+
+### Topics
+
+Topics are addresses that producers can send messages to. Other services can listen to these topics. A topic acts as a queue for messages. The message sent by a producer  will be sent out to the consumer and stored in the queue. You cannot change messages and they are stored permanently. You can configure Kafka topics to remove these messages if there are too many or after a period of time.
+
+These immutable queues allow us to store messages asynchronously regardless if a producer or consumer goes down. It also guarantees the correctness of messages (they’re untampered with).
+
+![Topics](https://miro.medium.com/max/638/0*9BHtxsFXupxcp0oB)
+
+### Consumer Groups
+
+A group of services that act as a single consumer. For any message going to a consumer group, Kafka routes that message to a single service. This helps you load balance messages and scale consumers.
+
+![Consumer Groups](https://miro.medium.com/max/700/0*Fm56PpryVr92gsKL)
+
+### Partitions
+
+When a producer posts to a topic, that message gets routed to a single partition. A producer by default will send messages to the topic. The topic will determine which partition the message will go to. By default, messages will be assigned to partitions via a round robin strategy. 
+
+You can configure topics (not the service) to split messages into different partitions. For instance, if you’re handling user messages (and have a user id), you can make sure that messages for that user stay within the same partition. You can do this by hashing the user id and then modding it by the number of partitions.
+
+Every message that goes into that partition is ordered within that partition. Even with multiple users (or other entity) messages being mapped to the same partition (red/green). You still get ordered user messages for each.
+
+Messages coming from a partition will be ordered. But partitions may send out their messages at any time. Therefore, topics, don’t guarantee order.
+
+One important thing is that you should keep the number of partitions in a Topic always equal or higher than the number of consumers in a consumers group, because within a consumer group the message will be destined to a consumer based on which partition the consumer is subscribed to. That means that if you have 3 consumers inside a consumer group but 1 partitions, only 1 of the consumers will receive messages.
+
+The way that Kafka defines the partition destination for the message based on a hashing of it's key, if the key is always the same, all messages will go the same partition. So in order to balance, you should change the key for each message sent.
+
+![Partitions](https://miro.medium.com/max/700/0*hpMqRff6d2VHbuJH)
+
 ## Architecture
 
 Kafka stores key-value messages that come from arbitrarily many processes called producers. The data can be partitioned into different "partitions" within different "topics". Within a partition, messages are strictly ordered by their offsets (the position of a message within a partition), and indexed and stored together with a timestamp. Other processes called "consumers" can read messages from partitions.
