@@ -87,6 +87,19 @@ Here are the list of some responsibilities of Zookeeper in the Architecture:
 
 Observation: The active controller is responsible for state management of partitions and replicas. For example if there are 10 brokers, there will be one broker which acts as a controller. Controller has the responsibility to maintain the leader-follower relationship across all the partitions. If a node is about to fail, message will be given (by controller) to other partition replicas in other brokers to be as a partition leaders to fulfill the responsibility of the partitions in the node that is about to fail. So when a node shuts down, new controller can be elected at any time to fulfill the duties.
 
+## Configuration
+
+It's important to configurate the data directories for both Kafka and Zookeeper because they stores logs in the temporary folder of the Operating System.
+
+### Kafka
+
+Edit the variable `logs.dirs=/tmp/kafka-logs` in the file `/config/server.properties` and set the logs destination folder that you want.
+
+### Zookeeper
+
+Edit the variable `dataDir=/tmp/zookeeper` in the file `/config/zookeeper.properties` and set the logs destination folder that you want.
+
+
 ## Commands 
 
 ### Starting Zookeeper
