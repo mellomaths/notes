@@ -17,7 +17,7 @@ services:
             - couchdb-network
 
     couchdb-init:
-        image: ubuntu
+        build: .docker/couchdb-init-alpine
         deploy:
             restart_policy:
                 condition: on-failure
@@ -28,7 +28,7 @@ services:
             COUCHDB_DATABASE: test
         depends_on: 
             - couchdb
-        command: ["sh","-c","sleep 15 && curl -u admin:password -X PUT couchdb:5984/_users && curl -u admin:password -X PUT couchdb:5984/test"]
+        command: ["sh","-c","sleep 25 && curl -u admin:password -X PUT couchdb:5984/_users && curl -u admin:password -X PUT couchdb:5984/test"]
         networks: 
             - couchdb-network
 
