@@ -1,0 +1,19 @@
+{
+  "name": "template-method",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bootstrap.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node bootstrap.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^15.12.5",
+    "ts-node": "^10.0.0",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.4"
+  }
+}
