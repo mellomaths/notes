@@ -1,5 +1,9 @@
 # Creative Patterns
 
+## Factory Method
+
+Definir uma interface para criar um objeto, mas deixando que as subclasses decidam qual classe deve ser instanciada. Permite que uma classe adie instanciação para subclasses.
+
 ## Static Factory Method
 
 > O padrão de projeto Static Factory Method é um padrão do tipo Padrão de Criação, mas não faz parte do GoF.
