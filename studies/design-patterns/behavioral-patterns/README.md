@@ -23,3 +23,9 @@ A intenção de um objeto nulo é encapsular a ausência de um objeto, fornecend
 Nesse padrão, um objeto nulo substitui a verificação de instância de objeto null num cliente. Em vez de verificar um valor nulo, o objeto nulo reflete uma relação de não fazer nada. Esse objeto nulo também pode ser usado para fornecer o comportamento padrão no caso de dados não disponíveis.
 
 Na prática, criamos uma classe abstrata especificando várias operações a serem feitas, classes concretas que estendem esta classe e uma classe de objeto nulo fornecendo implementação “não fazer nada” desta classe e será usada sem problemas onde precisamos verificar o valor nulo.
+
+## Chain of Responsibility
+
+Evita acoplar o remetente de uma solicitação ao seu receptor ao permitir que mais de um objeto tenha a chance de tratar a solicitação também.
+
+Os objetos receptores tornam-se partes de uma cadeia ou “pipeline”de objetos receptores e a solicitação é enviada de um objeto receptor a outro ao longo da cadeia, até que um (ou mais, talvez todos) dos objetos receptores manipule a solicitação.
