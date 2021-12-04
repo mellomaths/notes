@@ -102,7 +102,13 @@ Per instance billing.
 
 ## EC2 Instance Storage
 
-### Elastic Block Store (EBS)
+Better I/O Performance, but you lose their storage if the instance stop.
+
+Good for buffer, cache, scratch data, temporary content.
+
+Risk of data loss if hardware fails, so backups and replication are your responsibility.
+
+## Elastic Block Store (EBS)
 
 A network drive you can attach to instances while they run, allowing to persist data, even after their termination.
 
@@ -122,8 +128,87 @@ EBS Volumes can be attached on-demand, meaning that they can be created and be d
 
 By default, the root EBS Volume is deleted and any other attached EBS Volume is not deleted. This can be controlled by the AWS Console/CLI.
 
-#### EBS Snapshots
+EBS volumes have good but "limited" performance.
+
+If you need a high-performance hardware disk, use EC2 Instance Storage.
+
+### EBS Snapshots
 
 Make a backup (snapshot) of your EBS volume at a point in time, and it is not necessary to detach the volume, but its is recommended.
 
 With snapshots, you can copy data across Availability Zone or Region.
+
+### EBS Volume Types
+
+- **General Purpose SSD gp2/gp3:** volume that balances price and performance a wide variety of workloads.
+  - **usage:** System boot volumes, virtual desktop, development and test environment.
+  - **size:** 1GiB - 16TiB
+- **Provisioned IOPS (PIOPS) SSD io1/io2:** Highest-performance SSD volume for mission-critical low-latency or high-throughput workloads. Supports EBS Multi-attach.
+  - **usage:** Critical business application with sustained IOPS performance, or application that need more than 16,000 IOPS. Critical business application with sustained IOPS performance, or application that need more than 16,000 IOPS. Great for databases workloads, sensitive to storage perf and consistency.
+  - **size:** 4GiB - 16TiB
+- **Hard Disk Drives HDD:** Cannot be a boot volume.
+  - **Throughput Optimized HDD (st1):** Low cost HDD volume designed for frequently accessed, throughput-intensive workloads. Good for Big Data, Data Warehouses, Log Processing. Max throughput 500MiB/s - max IOPS 500.
+  - **Cold HDD (sc1):** Lowest cost HDD volume designed for less frequently accessed workloads. For data that is not frequently accessed and scenarios where lowest cost is important. Max throughput 250MiB/s - max IOPS 250.
+
+EBS Volumes are characterized in Size/Throughput/IOPS (I/O per second).
+
+Only gp2/gp3 and io1/io2 can be used as boot volumes, where the root OS is going to run.
+
+### EBS Multi-Attach - io1/io2 family
+
+Ability to attach the same EBS volume to multiple EC2 instances in the same Availability Zone.
+
+Each instance has full read and write permissions to the volume.
+
+Use case:
+
+- Achieve higher application availability in clustered Linux applications (ex: Teradata).
+- Applications must manage concurrent write operations.
+
+Must use a file system that is cluster-aware (not XFS, EX4, etc).
+
+## Amazon Machine Image (AMI)
+
+Are a customization of an EC2 Instance, where you add your own software, configuration, operating system, monitoring.
+
+It has a faster boot/configuration time because all your software is pre-packaged.
+
+AMIs are built for a specific region and can be copied across regions.
+
+You can launch EC2 instances from:
+
+- A public AMI: AWS provided.
+- Your own AMI: you can make and maintain them yourself.
+- An AWS Marketplace AMI: created by vendors.
+
+### AMI Process (Creating an AMI from an EC2 Instance)
+
+- Start an EC2 Instance and customize it.
+- Stop the instance (for data integrity).
+- Build an AMI - this will also create EBS snapshots.
+- Launch instances from other AMIs.
+
+## Elastic File System (EFS)
+
+Managed NFS (Network File System) that can be mounter on many EC2.
+
+EFS works with EC2 instances in multi Availability Zones.
+
+Highly available, scalable, expensive (3x gp2), pay per use.
+
+Is attached to Security Group to ensure connection security.
+
+Use case:
+
+- Content management.
+- Web serving.
+- Data Sharing.
+- Wordpress.
+
+Uses NFSv4.1 protocol.
+
+Compatible with Linux bases AMI (not Windows).
+
+Encryption at rest using KMS.
+
+The file system scales automatically, pay-per-use, no capacity planning.
