@@ -1,8 +1,8 @@
 # AWS Certified Developer Associate
 
-## IAM
+# IAM
 
-### Summary
+## Summary
 
 - Users: mapped to a physical user; has a password for AWS Console.
 - Groups: contains users only.
@@ -12,7 +12,7 @@
 - Access Keys: access AWS using CLI or SDK.
 - Audit: IAM Credential Reports & IAM Access Advisor.
 
-### Guidelines & Best Practices
+## Guidelines & Best Practices
 
 - Don't use the root account except for the AWS account setup.
 - One physical user = One AWS user.
@@ -24,11 +24,11 @@
 - Audit permissions of your account with the IAM Credentials Report.
 - Never Share IAM users & Access Keys.
 
-## EC2
+# EC2
 
-### Instances Purchasing Options
+## Instances Purchasing Options
 
-#### On-Demand Instances
+### On-Demand Instances
 
 Pay for what you use:
 
@@ -39,7 +39,7 @@ Has the highest cost but no upfront payment and no long-term commitment.
 
 Recommended for **short-term** and **un-interrupted** workloads, where you can't predict how the application will behave.
 
-#### Reserved Instances
+### Reserved Instances
 
 75% discount compared to On-Demand.
 
@@ -62,7 +62,7 @@ There are other types of Reserved Instances, like:
 
 - **Scheduled Reserved Instances** (deprecated): launch within time window you reserve. This means you can require a fraction of day/week/month but still with the commitment over 1 to 3 years.
 
-#### Spot Instances
+### Spot Instances
 
 Can get a discount of up to 90% compared to On-Demand.
 
@@ -72,7 +72,7 @@ Useful for workloads that are resilient to failure, like batch jobs, data analys
 
 Not suitable for critical jobs or Databases.
 
-#### Dedicated Hosts
+### Dedicated Hosts
 
 A physical server with EC2 instance capacity fully dedicated to your use.
 
@@ -88,7 +88,7 @@ Per host billing.
 
 Access to the underlying hardware and more affinity between a host and instance.
 
-#### Dedicated Instances
+### Dedicated Instances
 
 Instances running on hardware dedicated to you.
 
@@ -99,3 +99,25 @@ No control over instance placement (can move hardware after Stop/Start).
 A soft version of Dedicated Host.
 
 Per instance billing.
+
+## EC2 Instance Storage
+
+### Elastic Block Store (EBS)
+
+A network drive you can attach to instances while they run, allowing to persist data, even after their termination.
+
+Can only be mounter to one instance at a time (at CCP level).
+
+CCP - Certified Cloud Practitioner.
+
+They are bound to specific availability zone. An EBS Volume in us-east-1a cannot be attached to us-east-1b. To move the volume across, you need to snapshot it.
+
+Free tier is 30GB of EBS storage of type General Purpose (SSD) or Magnetic per month.
+
+It uses the network to communicate the instance, which means there might be a bit of latency, but in the order hand, it can be detached from an instance and attached to another one quickly.
+
+It is possible to attach 2 or more EBS Volumes to a single EC2 Instance.
+
+EBS Volumes can be attached on-demand, meaning that they can be created and be detached until you need to attach.
+
+By default, the root EBS Volume is deleted and any other attached EBS Volume is not deleted. This can be controlled by the AWS Console/CLI.
