@@ -121,3 +121,9 @@ It is possible to attach 2 or more EBS Volumes to a single EC2 Instance.
 EBS Volumes can be attached on-demand, meaning that they can be created and be detached until you need to attach.
 
 By default, the root EBS Volume is deleted and any other attached EBS Volume is not deleted. This can be controlled by the AWS Console/CLI.
+
+#### EBS Snapshots
+
+Make a backup (snapshot) of your EBS volume at a point in time, and it is not necessary to detach the volume, but its is recommended.
+
+With snapshots, you can copy data across Availability Zone or Region.
