@@ -212,3 +212,23 @@ Compatible with Linux bases AMI (not Windows).
 Encryption at rest using KMS.
 
 The file system scales automatically, pay-per-use, no capacity planning.
+
+EFS Scale:
+
+- 1000s of concurrent NFS clients, 10GB+ /s throughput.
+- Grow to Petabyte-scale network file system, automatically.
+
+Performance mode (set as EFS creation time):
+
+- General purpose (default): latency-sensitive use cases (web server, CMS, etc...).
+- Max I/O: higher latency, throughput, highly parallel (big data, media processing).
+
+Throughput mode:
+
+- Bursting (1TB = 50MiB/s + burst of up to 100MiB/s).
+- Provisioned (set your throughput regardless of storage size, ex: 1GiB/s for 1TB storage).
+
+Storage Tiers (Lifecycle management feature - move file after N days):
+
+- Standard: for frequently accessed files.
+- Infrequent access (EFS-IA): cost to retrieve files, lower price to store.
