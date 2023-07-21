@@ -15,12 +15,6 @@ def get_data() -> pd.DataFrame:
     return df
 
 
-def create_filter(df: pd.DataFrame, filter_field: str, filter_label: str) -> pd.DataFrame:
-    filter_value = st.selectbox(filter_label, np.sort(pd.unique(df[filter_field])))
-    df = df[df[filter_field] == filter_value]
-    return df
-
-
 def get_mean(df: pd.DataFrame, column: str) -> float:
     mean = df[column].mean()
     mean = mean if not math.isnan(mean) else 0
@@ -54,18 +48,31 @@ st.set_page_config(
 
 st.title("Projeto Imobiliário")
 
-df = get_data()
+df_original = get_data()
 
-st.header("Filtros")
 
-col1, col2 = st.columns(2)
-with col1:
-    df = create_filter(df=df, filter_field="Bairro", filter_label="Selecione o bairro")
+if "comparison_on" not in st.session_state:
+    st.session_state.comparison_on = False
 
-    df = create_filter(df=df, filter_field="Tipo", filter_label="Selecione o tipo do imóvel")
+with st.sidebar:
+    st.header("Filtros")
 
-with col2:
-    df = create_filter(df=df, filter_field="Quartos", filter_label="Quantidade de quartos")
+    df = df_original.copy()
+
+    district = st.selectbox("Selecione o bairro", np.sort(pd.unique(df["Bairro"])))
+    df = df[df["Bairro"] == district]
+
+    st.subheader("Comparação")
+    st.checkbox("Comparar", key="comparison_on")
+    district_compared = st.selectbox("Compare com o bairro:", np.sort(pd.unique(df_original["Bairro"])), disabled=not st.session_state.comparison_on)
+    df_comparison = df_original[df_original["Bairro"] == district_compared]
+
+    property_type = st.selectbox("Selecione o tipo do imóvel", np.sort(pd.unique(df["Tipo"])))
+    df = df[df["Tipo"] == property_type]
+    df_comparison = df_comparison[df_comparison["Tipo"] == property_type]
+
+    count_rooms = st.selectbox("Quantidade de quartos", np.sort(pd.unique(df["Quartos"])))
+    df_comparison = df_comparison[df_comparison["Quartos"] == count_rooms]
 
     area = st.radio(
         "Área",
@@ -75,43 +82,56 @@ with col2:
     min_area = float(min_area.strip())
     max_area = float(max_area.strip())
     df = df[(df["Area"] >= min_area) & (df["Area"] < max_area)]
+    df_comparison = df_comparison[(df_comparison["Area"] >= min_area) & (df_comparison["Area"] < max_area)]
 
-    check = st.checkbox('Tem suite?')
-    if check:
+    check_suite = st.checkbox('Com suite?')
+    if check_suite:
         df = df[df["Suites"] > 0]
+        df_comparison = df_comparison[df_comparison["Suites"] > 0]
+
+    check_vaga = st.checkbox('Com vaga na garagem?')
+    if check_vaga:
+        df = df[df["Vagas"] > 0]
+        df_comparison = df_comparison[df_comparison["Vagas"] > 0]
+
+    st.divider()
 
 
 placeholder = st.empty()
 with placeholder.container():
+    st.divider()
     st.header("Dados")
+
+    print(df_comparison)
 
     col1, col2 = st.columns(2)
     with col1:
         st.caption("Valores médios dado os filtros selecionados.")
+        st.subheader("")
         sub_col1, sub_col2, sub_col3 = st.columns(3)
         with sub_col1:
             mean_value = get_mean(df=df, column="Valor")
+            mean_value_compared = get_mean(df=df_comparison, column="Valor")
             st.metric(
                 label="Aluguel",
-                value=f"$ {round(mean_value,2)} ",
+                value=f"R$ {round(mean_value,2)} ", # ! Use money library to show currency values
+                delta=f"{round(mean_value - mean_value_compared,2)}",
+                help=f"O valor do aluguel em {district} é em média R$ {round(mean_value - mean_value_compared,2)} maior que em {district_compared} utilizando os mesmos filtros"
             )
 
         with sub_col2:
             mean_condo = get_mean(df=df, column="Condominio")
             st.metric(
                 label="Condominio",
-                value=f"$ {round(mean_condo,2)} ",
+                value=f"R$ {round(mean_condo,2)} ",
             )
         
         with sub_col3:
             mean_iptu = get_mean(df=df, column="IPTU")
             st.metric(
                 label="IPTU",
-                value=f"$ {round(mean_iptu,2)} ",
+                value=f"R$ {round(mean_iptu,2)} ",
             )
 
     with col2:
         st._legacy_dataframe(df)
-    
-    # col1, col2, col3 = st.columns(3)
-    # with
